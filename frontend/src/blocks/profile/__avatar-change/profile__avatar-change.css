@@ -1,0 +1,13 @@
+.profile__avatar-change {
+    width: 120px;
+    height: 120px;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    align-self: center;
+    position: relative;
+    isolation: isolate;
+}

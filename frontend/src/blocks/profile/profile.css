@@ -1,0 +1,26 @@
+.profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media screen and (max-width: 905px) {
+    .profile {
+        margin: 0 auto;
+        width: 88.13%;
+    }
+}
+
+@media screen and (max-width: 775px) {
+    .profile {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    .profile {
+        align-items: inherit;
+        width: 100%;
+    }
+}

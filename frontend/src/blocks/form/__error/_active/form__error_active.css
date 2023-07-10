@@ -1,0 +1,9 @@
+.form__error_active {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    display: inline;
+    color: #FF0000;
+    margin: 5px auto auto 0px;
+}

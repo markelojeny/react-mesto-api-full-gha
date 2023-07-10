@@ -1,0 +1,7 @@
+.header__auth {
+    max-width: 50%;
+    padding-top: 39px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

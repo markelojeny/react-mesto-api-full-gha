@@ -1,0 +1,5 @@
+.profile__edit {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}

@@ -1,0 +1,19 @@
+.popup__container_type_agreement {
+    min-width: 430px;
+    min-height: 181px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+@media screen and (max-width: 455px) {
+    .popup__container_type_agreement {
+        min-width: 282px;
+        max-width: 282px;
+    }
+}
+
+@media screen and (max-width: 316px) {
+    .popup__container_type_agreement {
+        max-width: 252px;
+    }
+}

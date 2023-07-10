@@ -1,0 +1,9 @@
+.like {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+    width: 22px;
+    height: 37px;
+}

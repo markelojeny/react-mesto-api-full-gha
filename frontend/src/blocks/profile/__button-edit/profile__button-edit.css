@@ -1,0 +1,19 @@
+.profile__button-edit {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #fff;
+    background: url(../../../images/karandash.svg) #000 no-repeat center;
+    cursor: pointer;
+}
+
+.profile__button-edit:hover {
+    opacity: .6;
+}
+
+@media screen and (max-width: 405px) {
+    .profile__button-edit {
+        width: 18px;
+        height: 18px;
+        background: url(../../../images/minkaran.svg) #000 no-repeat center;
+    }
+}

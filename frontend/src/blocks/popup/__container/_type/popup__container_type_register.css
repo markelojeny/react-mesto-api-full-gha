@@ -1,0 +1,6 @@
+.popup__container_type_register {
+    min-height: 330px;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+}

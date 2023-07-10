@@ -1,0 +1,28 @@
+.login__input {
+    margin: 0 0 22px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #fff;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 36px;
+    box-sizing: border-box;
+    border-bottom: 2px solid rgba(204, 204, 204, 1);
+    background-color: transparent;
+} 
+
+.login__input::placeholder {
+    color: #CCCCCC;
+}
+
+.login__input:nth-child(2) {
+    margin-bottom: 216px;
+}
+
+.login__input:active, :hover, :focus {
+    outline: 0;
+    outline-offset: 0;
+}

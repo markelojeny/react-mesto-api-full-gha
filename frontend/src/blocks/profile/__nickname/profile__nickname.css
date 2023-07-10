@@ -1,0 +1,21 @@
+.profile__nickname {
+    margin: 0 18px 0 0;
+    max-width: 300px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 42px;
+    line-height: 48px;
+    color: #fff;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 405px) {
+    .profile__nickname {
+        margin-right: 10px;
+        font-size: 27px;
+        line-height: 33px;
+        max-width: 189px;
+    }
+}

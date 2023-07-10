@@ -1,0 +1,14 @@
+.photo-card__button-delete {
+    width: 18px;
+    height: 19px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: 0;
+    background: url(../../../images/karzina.svg) no-repeat;
+    cursor: pointer;
+}
+
+.photo-card__button-delete:hover {
+    opacity: .6;
+}
