@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 //import {useNavigate} from 'react-router-dom';
 import AuthForm from "./AuthForm.js";
+//import auth from "../utils/auth.js";
 
 const Login = (props) => {
     //const navigate = useNavigate();
     //const location = useLocation();
+    
     const [formValue, setFormValue] = useState({
         email: '',
         password: ''
@@ -19,11 +21,14 @@ const Login = (props) => {
         });
     }
     const handleSubmit = (e) => {
+        //console.log(formValue.email, formValue.password);
         e.preventDefault();
+        props.onLogin(formValue.email, formValue.password);
         if (!formValue.email || !formValue.password){
             return;
+        } else {
+            return localStorage.setItem("validated", true);
         }
-        props.onLogin(formValue.email, formValue.password);
     }
 
     return (
@@ -39,5 +44,3 @@ const Login = (props) => {
 }
 
 export default Login;
-
-//<p className="login__title">Регистрация</p>

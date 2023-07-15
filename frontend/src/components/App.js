@@ -14,7 +14,7 @@ import InfoTooltip from './InfoTooltip.js';
 import CurrentUserContext from "../context/CurrentUserContext.js";
 import ProtectedRoute from "./ProtectedRoute.js";
 import api from "../utils/api.js";
-import * as auth from "../utils/auth.js";
+import auth from "../utils/auth.js";
 import registerOk from '../images/ok.svg'
 import registerNotOk from '../images/not_ok.svg'
 
@@ -57,53 +57,54 @@ function App() {
   }
 
   function onLogin (email, password) {
+    if(!email || !password) {
+      return;
+    }
     auth.authorize(email, password)
-        .then((data) => {
-            localStorage.setItem('jwt', data.token);
-            console.log(data.token);
-            handleLogin();
-            navigate('/', {replace: true});
+        .then((res) => {
+          const gg = localStorage.getItem("validated") === 'true';
+          console.log(gg);
+          setMailName(res.data.email);
+          navigate('/', {replace: true});
+          handleLogin();
         })
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
   }
 
   React.useEffect(() => {
-    handleTokenCheck();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleTokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt){
-      auth.checkToken(jwt)
+    if (localStorage.getItem("validated") === 'true') {
+      auth
+        .checkToken()
         .then((res) => {
-          if (res) {
           setMailName(res.data.email);
           handleLogin();
-          navigate("/", {replace: true})
-        }
-      })
+          navigate("/");
+        })
         .catch((err) => {
-        console.error(err)
-      });
+          localStorage.clear();
+          navigate("/signin");
+          console.log(err);
+        });
     }
-  }
+  }, [navigate]);
 
   function onSignOut() {
     setLoggedIn(false);
     setMailName(null);
-    navigate("/sign-in");
-    localStorage.removeItem("jwt");
+    navigate("/signin");
+    localStorage.clear();
   }
 
   React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([dataCurrentUser, dataCards]) => {
-        setCurrentUser(dataCurrentUser)
-        setCards(dataCards);
+    if (loggedIn === true) {
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then((res) => {
+        setCurrentUser(res[0].data);
+        setCards(res[1].data.reverse());
       })
-      .catch(error => console.error(error));
-  }, []);
+      .catch(error => console.log(error));
+    }
+  }, [loggedIn]);
 
   function handleAvatarEditClick() {
     setIsEditAvatarPopupOpen(true);  
@@ -135,26 +136,35 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    console.log(card);
+    const isLiked = card.likes.some(i => i === currentUser._id);
+    console.log(currentUser);
+    console.log(card.likes);
+    console.log(isLiked);
     api.changeLikeCardStatus(card._id, isLiked)
     .then((newCard) => {
+        console.log(newCard.data);
         setCards((state) => state.map(
-          (c) => c._id === card._id ? newCard : c
+          (c) => c._id === card._id ? newCard.data : c
           ));
+          console.log(isLiked);
     })
     .catch(error => console.error(error));
   } 
-
+  
   function handleDeleteClick(card) {
-    api.deleteCard(card._id)
-    .then(() => {
-      setCards((state) => state.filter(
-      (c) => c._id !== card._id));
-    })
-    .catch(error => console.error(error));
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleUpdateUser(info) {
+    console.log(info);
     setIsLoading(true);
     api.editUser(info)
     .then((data) => {
@@ -180,8 +190,10 @@ function App() {
     setIsLoading(true);
     api.addCard(info)
     .then((newCard) => {
-      setCards([newCard, ...cards]);
-      //console.log(newCard);
+      setCards({ info:[newCard], ...cards});
+      console.log({...cards});
+      console.log([newCard]);
+      //setCards([...cards, newCard]);
       closePopup();
     })
     .catch(error => console.error(error))

@@ -1,54 +1,58 @@
-export const BASE_URL = 'http://api.mesto.marjen.nomoredo.nomoredomains.work';
+class Auth {
+  constructor(config) {
+    this._url = config.url;
+    this._headers = config.headers;
+  }
 
-const handleResponse = (res) => {
-  return res.ok
-    ? res.json()
-    : Promise.reject(`Ошибка в ${res.status}`);
-};
+  register (email, password) {
+    console.log(password, email);
+    return this._request(`${this._url}/signup`, {
+        method: 'POST',
+        headers: this._headers,
+        body: JSON.stringify({ password, email }),
+    })
+  };
 
-export const register = (email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, password })
-  })
-  .then((res) => {
-    return handleResponse(res)
-  });
-};
+  authorize (email, password) {
+    console.log(email, password);
+    return this._request(`${this._url}/signin`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({ email, password }),
+    })
+  };
 
-export const authorize = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({email, password})
-  })
-  .then((res) => {
-    return handleResponse(res)
-  })
-  .then((data) => {
-    if (data.token){
-      localStorage.setItem('jwt', data.jwt);
-      return data;
-    }
-  });
-};
+  checkToken() {
+    return this._request(`${this._url}/users/me`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+  }
+  
+  _handleResponse (res) {
+    return res.ok
+      ? res.json()
+      : Promise.reject(`Ошибка в ${res.status}`);
+  }
 
-export const checkToken = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization' : `Bearer ${token}`
-      },
-  })
-  .then((res) => {
-    return handleResponse(res)
-  })
-  .then(data => data);
+  _request(url, config) {
+    const updatedOptions = {
+      ...config,
+      credentials: "include",
+    };
+
+    return fetch(url, updatedOptions)
+    .then((res) => this._handleResponse(res));
+  }
 }
+
+const auth = new Auth({
+  url: 'https://api.mesto.marjen.nomoredo.nomoredomains.work',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export default auth;

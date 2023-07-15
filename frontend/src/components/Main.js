@@ -6,6 +6,18 @@ import CurrentUserContext from "../context/CurrentUserContext.js"
 function Main(props) {
 
   const currentUser = React.useContext(CurrentUserContext);
+  const data = Array.from(props.cards);
+  const cardsRender = data.map((element) => {
+    return (
+      <Card
+        key={element._id}
+        card={element}
+        onCardClick={props.onCardClick}
+        onCardLike={props.onCardLike}
+        onCardDelete={props.onCardDelete}
+      />
+    );
+  });
 
   return (
     <main className="content">
@@ -27,12 +39,7 @@ function Main(props) {
           <button className="profile__button-add" type="button" onClick={props.addPlaceClick}></button>
         </section>
 
-        <section className="photo-cards">
-          {props.cards.map((data) => {
-            return <Card card={data} key={data._id} onCardClick={props.onCardClick} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete}/>
-            }
-          )}
-        </section>
+        <section className="photo-cards">{cardsRender}</section>
 
     </main>
 

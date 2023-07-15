@@ -1,7 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+
 const { CREATED, OK } = require('../utils/errors');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const NotFoundError = require('../errors/NotFoundError');
 
 const ValidationError = require('../errors/ValidationError');
@@ -62,12 +66,8 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(CREATED).send({
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-      _id: user._id,
-      email: user.email,
+    .then(() => res.status(CREATED).send({
+      name, about, avatar, email,
     }))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -126,13 +126,18 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'SECRET');
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
+      );
       res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
         expiresIn: '7d',
         httpOnly: true,
         sameSite: true,
+        // domain: 'localhost:3000',
       });
       res.send({ data: user.toJSON() });
     })
-    .catch(next);
+    .catch((err) => next(err));
 };

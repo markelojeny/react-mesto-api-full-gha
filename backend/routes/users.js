@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const cookieParser = require('cookie-parser');
 
 const {
   validationUpdateProfile,
@@ -9,6 +10,8 @@ const {
 const {
   getUsers, getUserById, getUser, updateProfile, updateAvatar,
 } = require('../controllers/users');
+
+router.use(cookieParser());
 
 router.get('/users', getUsers);
 router.get('/users/me', getUser);
