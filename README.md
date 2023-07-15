@@ -10,7 +10,5 @@
 ## Ссылки на проект
 
 IP-адрес 158.160.100.217
-
-Frontend https://mesto.marjen.nomoredo.nomoredomains.work
-
-Backend https://api.mesto.marjen.nomoredo.nomoredomains.work
+Frontend https://mesto.marjen.nomoredomains.work/
+Backend https://api.mesto.marjen.nomoredo.nomoredomains.work/
