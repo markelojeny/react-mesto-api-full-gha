@@ -62,8 +62,8 @@ function App() {
     }
     auth.authorize(email, password)
         .then((res) => {
-          const gg = localStorage.getItem("validated") === 'true';
-          console.log(gg);
+          const gg = localStorage.getItem("validated") === 'true'; 
+          console.log(gg); 
           setMailName(res.data.email);
           navigate('/', {replace: true});
           handleLogin();
@@ -136,18 +136,12 @@ function App() {
   }
 
   function handleCardLike(card) {
-    console.log(card);
     const isLiked = card.likes.some(i => i === currentUser._id);
-    console.log(currentUser);
-    console.log(card.likes);
-    console.log(isLiked);
     api.changeLikeCardStatus(card._id, isLiked)
     .then((newCard) => {
-        console.log(newCard.data);
         setCards((state) => state.map(
           (c) => c._id === card._id ? newCard.data : c
           ));
-          console.log(isLiked);
     })
     .catch(error => console.error(error));
   } 
@@ -164,7 +158,6 @@ function App() {
   }
 
   function handleUpdateUser(info) {
-    console.log(info);
     setIsLoading(true);
     api.editUser(info)
     .then((data) => {
@@ -180,7 +173,6 @@ function App() {
     api.changeAvatar(info)
     .then((res) => {
       setCurrentUser(res);
-      //console.log(res);
       closePopup();
     })
     .catch(error => console.error(error))
@@ -191,9 +183,6 @@ function App() {
     api.addCard(info)
     .then((newCard) => {
       setCards({ info:[newCard], ...cards});
-      console.log({...cards});
-      console.log([newCard]);
-      //setCards([...cards, newCard]);
       closePopup();
     })
     .catch(error => console.error(error))
@@ -251,7 +240,7 @@ function App() {
       onClose={closePopup}
       isLoading={isLoading} />
 
-      <PopupWithForm name="agreement" title="Вы уверены?" text="Да" onClose={closePopup} forms="agreement">
+      <PopupWithForm name="agreement" title="Вы уверены?" text="Да" forms="agreement">
         
       </PopupWithForm>
 

@@ -17,7 +17,7 @@ module.exports.validationGetUser = celebrate({
 
 module.exports.validationUpdateAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().regex(url),
+    avatar: Joi.string().required().regex(url),
   }),
 });
 

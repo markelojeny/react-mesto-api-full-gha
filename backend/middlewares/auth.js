@@ -19,6 +19,7 @@ module.exports.auth = (req, res, next) => {
     );
   } catch (err) {
     next(new AuthError('Необходима авторизация'));
+    return;
   }
   req.user = payload;
 

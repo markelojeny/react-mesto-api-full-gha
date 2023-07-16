@@ -16,9 +16,6 @@ module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new ValidationError(`Некорректные данные: + ${err.message}`));
-      }
       next(err);
     });
 };
@@ -33,10 +30,11 @@ module.exports.getUserById = (req, res, next) => {
       res.status(OK).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new ValidationError(`Некорректные данные: + ${err.message}`));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -47,9 +45,6 @@ module.exports.getUser = (req, res, next) => {
       res.status(OK).send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new ValidationError(`Некорректные данные: + ${err.message}`));
-      }
       next(err);
     });
 };
@@ -70,12 +65,13 @@ module.exports.createUser = (req, res, next) => {
       name, about, avatar, email,
     }))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         next(new ValidationError(`Некорректные данные: + ${err.message}`));
       } else if (err.code === 11000) {
         next(new TakenEmailError('Такой mail уже есть базе данных'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -93,7 +89,7 @@ module.exports.updateProfile = (req, res, next) => {
       res.status(OK).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         return next(new ValidationError(`Некорректные данные: + ${err.message}`));
       }
       return next(err);
@@ -114,7 +110,7 @@ module.exports.updateAvatar = (req, res, next) => {
       res.status(OK).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         return next(new ValidationError(`Некорректные данные: + ${err.message}`));
       }
       return next(err);
@@ -137,7 +133,15 @@ module.exports.login = (req, res, next) => {
         sameSite: true,
         // domain: 'localhost:3000',
       });
-      res.send({ data: user.toJSON() });
+      res.send({
+        data: {
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+          email: user.email,
+        },
+      });
     })
     .catch((err) => next(err));
 };

@@ -9,12 +9,7 @@ const AccessDeniedError = require('../errors/AccessDeniedError');
 module.exports.getCard = (req, res, next) => {
   Card.find({})
     .then((card) => res.send({ data: card }))
-    .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        return next(new ValidationError(`Некорректные данные: + ${err.message}`));
-      }
-      return next(err);
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -24,7 +19,7 @@ module.exports.createCard = (req, res, next) => {
   Card.create({ name, link, owner })
     .then((card) => res.status(CREATED).send({ data: card }))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         return next(new ValidationError(`Некорректные данные: + ${err.message}`));
       }
       return next(err);
@@ -38,7 +33,7 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .then((card) => {
       if (String(card.owner) === req.user._id) {
-        Card.findByIdAndRemove(req.params.cardId).then(() => res.status(OK).send(card));
+        Card.deleteOne({ _id: req.params.cardId }).then(() => res.status(OK).send(card));
       } else {
         throw new AccessDeniedError('Нет прав на удаление карточки');
       }
@@ -59,7 +54,7 @@ module.exports.likeCard = (req, res, next) => {
       res.status(OK).send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         return next(new ValidationError(`Некорректные данные: + ${err.message}`));
       }
       return next(err);
@@ -79,7 +74,7 @@ module.exports.dislikeCard = (req, res, next) => {
       res.status(OK).send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         return next(new ValidationError(`Некорректные данные: + ${err.message}`));
       }
       return next(err);
