@@ -31,8 +31,8 @@ app.use(cookieParser());
 app.use(requestLogger);
 app.use(cors({
   origin: [
-    'https://mesto.marjen.nomoredo.nomoredomains.work',
-    'http://mesto.marjen.nomoredo.nomoredomains.work',
+    'http://mesto.marjen.nomoredomains.work',
+    'https://mesto.marjen.nomoredomains.work',
     'http://localhost:3001',
   ],
   exposedHeaders: 'Access-Control-Allow-Origin',
