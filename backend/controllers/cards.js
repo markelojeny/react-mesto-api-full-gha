@@ -33,10 +33,12 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .then((card) => {
       if (String(card.owner) === req.user._id) {
-        Card.deleteOne({ _id: req.params.cardId }).then(() => res.status(OK).send(card));
-      } else {
-        throw new AccessDeniedError('Нет прав на удаление карточки');
+        return Card.deleteOne({ _id: req.params.cardId })
+          .then(() => {
+            res.status(OK).send(card);
+          });
       }
+      throw new AccessDeniedError('Нет прав на удаление карточки');
     })
     .catch(next);
 };
